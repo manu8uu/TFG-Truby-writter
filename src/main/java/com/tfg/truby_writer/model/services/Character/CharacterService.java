@@ -26,7 +26,6 @@ public interface CharacterService {
 
     Character findCharacterByName(Long projectId, String name) throws InstanceNotFoundException;
 
-    Character findCharacterById(Long id) throws InstanceNotFoundException;
 
 }
 

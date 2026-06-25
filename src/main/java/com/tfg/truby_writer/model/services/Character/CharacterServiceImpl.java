@@ -76,20 +76,5 @@ public class CharacterServiceImpl implements CharacterService{
         }
         return character;
     }
-
-    @Override
-    public Character findCharacterById(Long id) throws InstanceNotFoundException{
-        Character character = characterDao.findCharacterById(id);
-        if (character == null) {
-            throw new InstanceNotFoundException("project.entities.character", id);
-        }
-        return character;
-    }
-
-
-
-
-
-
     
 }

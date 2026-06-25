@@ -31,6 +31,7 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserDao userDao;
 
+	@Override
 	public User checkUser(Long userId) throws InstanceNotFoundException {
 
 		Optional<User> user = userDao.findById(userId);
@@ -99,6 +100,9 @@ public class UserServiceImpl implements UserService {
 		
 	}
 
+	
+	
+
 	// ADMIN
 
 	@Override
@@ -134,5 +138,20 @@ public class UserServiceImpl implements UserService {
 		return userDao.findByUsername(username)
 				.orElseThrow(() -> new InstanceNotFoundException("project.entities.user", username));
 	}
+
+	@Override
+	public Boolean unblockUser(User user, Long id) throws InstanceNotFoundException {
+		if (user.getRole() != 1) {
+			throw new IllegalArgumentException("User does not have admin privileges");
+		}
+		User targetUser = checkUser(id);
+		if (targetUser.getBlocked()== false) {
+			return false;
+		}
+		targetUser.setBlocked(false);
+		return userDao.save(targetUser) != null;
+	}
+
+	
 
 }

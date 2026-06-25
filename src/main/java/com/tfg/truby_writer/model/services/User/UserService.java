@@ -11,6 +11,8 @@ import com.tfg.truby_writer.model.services.Block;
 
 public interface UserService {
 
+	User checkUser(Long userId) throws InstanceNotFoundException;
+
     void signUp(User user) throws DuplicateInstanceException;
 	
 	User login(String userName, String password) throws IncorrectLoginException;
@@ -19,6 +21,7 @@ public interface UserService {
 		
 	void changePassword(Long id, String oldPassword, String newPassword)
 		throws InstanceNotFoundException, IncorrectPasswordException;
+	
 
 	// ADMIN
 
@@ -28,6 +31,6 @@ public interface UserService {
 
 	User findUserByUsername(User user, String username) throws InstanceNotFoundException;
 
-    
+	Boolean unblockUser(User user, Long id) throws InstanceNotFoundException, IllegalArgumentException;
         
 }
