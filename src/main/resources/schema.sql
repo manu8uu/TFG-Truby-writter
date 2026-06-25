@@ -1,32 +1,30 @@
 
-DROP TABLE IF EXISTS network_relationships;
-DROP TABLE IF EXISTS network_nodes;
-DROP TABLE IF EXISTS character_images;
-DROP TABLE IF EXISTS characters;
-DROP TABLE IF EXISTS network;
-DROP TABLE IF EXISTS premise;
-DROP TABLE IF EXISTS events;
-DROP TABLE IF EXISTS line_time;
-DROP TABLE IF EXISTS location_points;
-DROP TABLE IF EXISTS location;
-DROP TABLE IF EXISTS plot;
-DROP TABLE IF EXISTS project;
-DROP TABLE IF EXISTS users;
-
+DROP TABLE IF EXISTS events CASCADE;
+DROP TABLE IF EXISTS line_time CASCADE;
+DROP TABLE IF EXISTS location_points CASCADE;
+DROP TABLE IF EXISTS location CASCADE;
+DROP TABLE IF EXISTS network_relationships CASCADE;
+DROP TABLE IF EXISTS network_nodes CASCADE;
+DROP TABLE IF EXISTS character_images CASCADE;
+DROP TABLE IF EXISTS characters CASCADE;
+DROP TABLE IF EXISTS premise CASCADE;
+DROP TABLE IF EXISTS network CASCADE;
+DROP TABLE IF EXISTS plot CASCADE;
+DROP TABLE IF EXISTS project CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
 
 
 -- USUARIOS
-DROP TABLE IF EXISTS users;
 CREATE TABLE users (
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    email VARCHAR(100) NOT NULL
+    email VARCHAR(100) NOT NULL,
+    role INT NOT NULL, 
+    blocked BOOLEAN 
 );
 
-
 -- PROYECTO
-
 CREATE TABLE project (
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
@@ -38,7 +36,6 @@ CREATE TABLE project (
 );
 
 -- TRAMAS
-
 CREATE TABLE plot (
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     project_id BIGINT NOT NULL,
@@ -54,14 +51,15 @@ CREATE TABLE plot (
     struct_self_revelation TEXT,
     struct_new_equilibrium TEXT,
 
+    network_id BIGINT,
+    timeline_id BIGINT,
+
     FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE CASCADE
 );
 
 -- PREMISA 
-
 CREATE TABLE premise (
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    project_id BIGINT, 
     plot_id BIGINT,     
     premise TEXT,
     narrative_possibilities TEXT,
@@ -71,12 +69,10 @@ CREATE TABLE premise (
     conflict TEXT,
     moral_decision TEXT,
 
-    FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE CASCADE,
     FOREIGN KEY (plot_id) REFERENCES plot(id) ON DELETE CASCADE
 );
 
---  PERSONAJES 
-
+-- PERSONAJES Y REDES
 CREATE TABLE network (
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     plot_id BIGINT NOT NULL,
@@ -85,6 +81,10 @@ CREATE TABLE network (
     FOREIGN KEY (plot_id) REFERENCES plot(id) ON DELETE CASCADE
 );
 
+ALTER TABLE plot 
+ADD CONSTRAINT fk_plot_network 
+FOREIGN KEY (network_id) REFERENCES network(id) ON DELETE CASCADE;
+
 CREATE TABLE characters (
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     project_id BIGINT NOT NULL, 
@@ -92,14 +92,6 @@ CREATE TABLE characters (
     bio TEXT,
     main_image_url VARCHAR(500),
     FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE CASCADE
-);
-
-CREATE TABLE character_images (
-    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    character_id BIGINT NOT NULL, 
-    image_url VARCHAR(500) NOT NULL,
-    caption VARCHAR(255),
-    FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE
 );
 
 CREATE TABLE network_nodes (
@@ -154,7 +146,6 @@ CREATE TABLE location_points (
 );
 
 -- EVENTOS Y LÍNEA DE TIEMPO
-
 CREATE TABLE line_time (
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     plot_id BIGINT NOT NULL,

@@ -1,10 +1,13 @@
-package com.tfg.truby_writer.model.services;
+package com.tfg.truby_writer.model.services.User;
+
+import java.util.List;
 
 import com.tfg.truby_writer.model.entities.User;
 import com.tfg.truby_writer.model.exceptions.DuplicateInstanceException;
 import com.tfg.truby_writer.model.exceptions.IncorrectLoginException;
 import com.tfg.truby_writer.model.exceptions.IncorrectPasswordException;
-import com.tfg.truby_writer.model.exceptions.InstanceNotFoundException; 
+import com.tfg.truby_writer.model.exceptions.InstanceNotFoundException;
+import com.tfg.truby_writer.model.services.Block; 
 
 public interface UserService {
 
@@ -17,6 +20,13 @@ public interface UserService {
 	void changePassword(Long id, String oldPassword, String newPassword)
 		throws InstanceNotFoundException, IncorrectPasswordException;
 
+	// ADMIN
+
+	Block<User> searchUsersByFilter(User user, Boolean blocked, String filter);
+
+	Boolean blockUser(User user, Long id) throws InstanceNotFoundException;
+
+	User findUserByUsername(User user, String username) throws InstanceNotFoundException;
 
     
         

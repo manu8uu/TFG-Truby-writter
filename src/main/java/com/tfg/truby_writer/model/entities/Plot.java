@@ -44,21 +44,21 @@ public class Plot {
     @Column(name = "struct_new_equilibrium", columnDefinition = "TEXT")
     private String structNewEquilibrium;
 
-    // Relaciones
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", nullable = false)
     @ToString.Exclude
     private Project project;
 
-    @OneToMany(mappedBy = "plot", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
-    private List<Network> networks;
 
     @OneToMany(mappedBy = "plot", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<Location> locations;
 
-    @OneToMany(mappedBy = "plot", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "plot", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
-    private List<LineTime> timelines;
+    private LineTime timeline;
+
+    @OneToOne(mappedBy = "plot", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private Network network;
 }

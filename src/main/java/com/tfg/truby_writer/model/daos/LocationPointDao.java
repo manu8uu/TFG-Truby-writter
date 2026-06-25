@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.tfg.truby_writer.model.entities.LocationPoint;
 
 public interface LocationPointDao extends JpaRepository<LocationPoint, Long> {
+
+    LocationPoint findByLocationIdAndName(Long locationId, String name);
     
 }
 

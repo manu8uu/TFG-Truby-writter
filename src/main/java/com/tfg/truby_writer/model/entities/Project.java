@@ -44,9 +44,6 @@ public class Project {
     @ToString.Exclude
     private List<Character> characters;
     
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
-    private List<Premise> premises;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

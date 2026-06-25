@@ -37,12 +37,9 @@ public class Premise {
     @Column(name = "moral_decision", columnDefinition = "TEXT")
     private String moralDecision;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id")
-    @ToString.Exclude
-    private Project project;
+    
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "plot_id")
     @ToString.Exclude
     private Plot plot;

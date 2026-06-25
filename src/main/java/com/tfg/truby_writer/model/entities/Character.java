@@ -29,10 +29,6 @@ public class Character {
     @JoinColumn(name = "project_id", nullable = false)
     @ToString.Exclude
     private Project project;
-
-    @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
-    private List<CharacterImage> images;
     
 
 }

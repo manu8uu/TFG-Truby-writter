@@ -4,6 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.tfg.truby_writer.model.entities.NetworkNode;
 
-public interface NetworkNodeDao extends JpaRepository<NetworkNode   , Long> {
+public interface NetworkNodeDao extends JpaRepository<NetworkNode, Long> {
+
+    <Optional>NetworkNode findByNetworkIdAndCharacterId(Long networkId, Long characterId);
     
 }

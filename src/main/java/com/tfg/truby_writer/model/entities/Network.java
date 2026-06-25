@@ -22,7 +22,7 @@ public class Network {
     @Column(name = "background_color", length = 10)
     private String backgroundColor;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "plot_id", nullable = false)
     @ToString.Exclude
     private Plot plot;
