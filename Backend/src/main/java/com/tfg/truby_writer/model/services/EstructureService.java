@@ -1,4 +1,4 @@
-package com.tfg.truby_writer.model.services.Estructure;
+package com.tfg.truby_writer.model.services;
 
 
 import com.tfg.truby_writer.model.entities.Plot;
@@ -8,17 +8,30 @@ import com.tfg.truby_writer.model.services.Block;
 import com.tfg.truby_writer.model.entities.Network;
 import com.tfg.truby_writer.model.entities.NetworkNode;
 import com.tfg.truby_writer.model.entities.NetworkRelationship;
+import com.tfg.truby_writer.model.entities.User;
 
 
 
 import com.tfg.truby_writer.model.exceptions.DuplicateInstanceException;
 import com.tfg.truby_writer.model.exceptions.InstanceNotFoundException; 
+import com.tfg.truby_writer.model.exceptions.ProjectPermissionException;
+import com.tfg.truby_writer.model.exceptions.ProjectPermissionException;
+
 import java.util.List;
 import com.tfg.truby_writer.model.enums.Enums;
 
 
 
 public interface EstructureService {
+
+    //PROJECT
+
+    Project createProject(User user, String name, String description) throws DuplicateInstanceException, InstanceNotFoundException;
+    
+    Project getProject(Long id) throws InstanceNotFoundException;
+        
+    void deleteProject(User user,Long id) throws InstanceNotFoundException, ProjectPermissionException;
+
 
 
     // PLOTS
@@ -58,7 +71,8 @@ public interface EstructureService {
   
     public NetworkRelationship findRelationshipByNodeFromAndNodeTo(Long nodeFromId, Long nodeToId) throws InstanceNotFoundException;
 
-    public NetworkRelationship addRelationshiptoNetwork(Long plotId, Long characterId1, Long characterId2, Enums.RelationshipType relationshipType) throws InstanceNotFoundException, DuplicateInstanceException;
+    public NetworkRelationship addRelationshiptoNetwork(Long plotId, Long characterId1, Long characterId2, Enums.RelationshipType relationshipType) 
+    throws InstanceNotFoundException, DuplicateInstanceException;
 
     public void deleteRelationship(Long plotId, Long characterId1, Long characterId2) throws InstanceNotFoundException;
 

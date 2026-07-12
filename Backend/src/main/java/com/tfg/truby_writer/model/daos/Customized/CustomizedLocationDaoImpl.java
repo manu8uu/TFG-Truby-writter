@@ -31,7 +31,6 @@ public class CustomizedLocationDaoImpl implements CustomizedLocationDao {
         String[] tokens = getTokens(text);
         List<String> conditions = new ArrayList<>();
         
-        // Alias cambiado a 'l' para Location
         if (plotId != null) {
             conditions.add("l.plot.id = :plotId"); 
         }

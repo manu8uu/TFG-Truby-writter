@@ -1,4 +1,4 @@
-package com.tfg.truby_writer.model.services.Locations;
+package com.tfg.truby_writer.model.services;
 
 import com.tfg.truby_writer.model.entities.Location;
 import com.tfg.truby_writer.model.entities.LocationPoint;
@@ -7,8 +7,6 @@ import com.tfg.truby_writer.model.services.Block;
 
 import com.tfg.truby_writer.model.exceptions.DuplicateInstanceException;
 import com.tfg.truby_writer.model.exceptions.InstanceNotFoundException; 
-
-
 
 
 public interface LocationsService {
@@ -27,9 +25,9 @@ public interface LocationsService {
 
     // LOCATION POINTS
     
-    LocationPoint addLocationPoint(Long locationId, String name, String description, Float coordX, Float coordY, Enums.MarkerType markerType, String markerIcon) throws DuplicateInstanceException, InstanceNotFoundException;
+    LocationPoint addLocationPoint(Long locationId, String name, String description, Float coordX, Float coordY, Enums.MarkerType markerType, String markerIcon) throws DuplicateInstanceException, InstanceNotFoundException, IllegalArgumentException;
     
-    LocationPoint modifyLocationPoint(Long locationPointId, String name, String description, Float coordX, Float coordY, Enums.MarkerType markerType, String markerIcon) throws InstanceNotFoundException;
+    LocationPoint modifyLocationPoint(Long locationPointId, String name, String description, Float coordX, Float coordY, Enums.MarkerType markerType, String markerIcon) throws InstanceNotFoundException, IllegalArgumentException;
 
     void deleteLocationPoint(Long locationPointId) throws InstanceNotFoundException;
 

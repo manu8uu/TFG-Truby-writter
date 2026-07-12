@@ -8,22 +8,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.tfg.truby_writer.model.exceptions.DuplicateInstanceException;
 import com.tfg.truby_writer.model.exceptions.InstanceNotFoundException;
-import com.tfg.truby_writer.model.services.User.UserService;
+import com.tfg.truby_writer.model.exceptions.ProjectPermissionException;
+import com.tfg.truby_writer.model.services.UserService;
 import com.tfg.truby_writer.model.entities.User;
-import com.tfg.truby_writer.model.services.Project.ProjectService;
 import com.tfg.truby_writer.model.entities.Project;
-import com.tfg.truby_writer.model.services.Character.CharacterService;
 import com.tfg.truby_writer.model.entities.Character;
-import com.tfg.truby_writer.model.services.Estructure.EstructureService;
+import com.tfg.truby_writer.model.services.EstructureService;
 import com.tfg.truby_writer.model.entities.Plot;
 import com.tfg.truby_writer.model.entities.Premise;
 import com.tfg.truby_writer.model.entities.NetworkNode;
 import com.tfg.truby_writer.model.entities.NetworkRelationship;
+import com.tfg.truby_writer.model.services.ObjectsService;
 
 import com.tfg.truby_writer.model.enums.Enums;
 
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.beans.Transient;
 
 
 
@@ -37,9 +39,8 @@ public class EstructureServiceTest {
     @Autowired
     private UserService userService;
     @Autowired
-    private ProjectService projectService;
-    @Autowired
-    private CharacterService characterService;
+    private ObjectsService objectsService;
+    
 
     private User createUser(String userName) throws DuplicateInstanceException, InstanceNotFoundException{
 		 User user = User.builder()
@@ -55,8 +56,65 @@ public class EstructureServiceTest {
 
 	}
 
+
+    @Test
+    public void testCreateProject() throws DuplicateInstanceException, InstanceNotFoundException{
+        
+        User user = createUser("user");
+        Project project = estructureService.createProject(user, "project", "description");
+        assertNotNull(estructureService.getProject(project.getId()));
+        
+    }
+
+    @Test
+    public void testGetProject() throws DuplicateInstanceException, InstanceNotFoundException{
+        
+        User user = createUser("user");
+        Project project = estructureService.createProject(user, "project", "description");
+        assertNotNull(estructureService.getProject(project.getId()));
+        
+    }
+
+    @Test
+    public void testGetProjectWithNonExistentId() throws DuplicateInstanceException, InstanceNotFoundException{
+        
+        assertThrows(InstanceNotFoundException.class, () -> estructureService.getProject(1L));
+        
+    }
+
+
+    @Test
+    public void testDeleteProject() throws DuplicateInstanceException, InstanceNotFoundException, ProjectPermissionException{
+            
+        User user = createUser("user");
+        Project project = estructureService.createProject(user, "project", "description");
+        assertNotNull(estructureService.getProject(project.getId()));
+        estructureService.deleteProject(user, project.getId());
+        assertThrows(InstanceNotFoundException.class, () -> estructureService.getProject(project.getId()));
+        
+    }
+
+    @Test
+    public void testDeleteProjectWithNonExistentId() throws DuplicateInstanceException, InstanceNotFoundException, ProjectPermissionException{
+        
+        User user = createUser("user");
+        assertThrows(InstanceNotFoundException.class, () -> estructureService.deleteProject(user, 1L));
+        
+    }
+
+    @Test
+    public void testTrytoDeleteProjectFromAnotherUser() throws DuplicateInstanceException, InstanceNotFoundException, ProjectPermissionException{
+        
+        User user = createUser("user");
+        User user2 = createUser("user2");
+        Project project = estructureService.createProject(user, "project", "description");
+        assertThrows(ProjectPermissionException.class, () -> estructureService.deleteProject(user2, project.getId()));
+        
+    }
+
+
     private Project createProject(User user) throws DuplicateInstanceException, InstanceNotFoundException{
-        return projectService.createProject(user, "project", "description");
+        return estructureService.createProject(user, "project", "description");
     }
 
     @Test
@@ -193,7 +251,7 @@ public class EstructureServiceTest {
         User user = createUser("user");
         Project project = createProject(user);
         Plot plot =estructureService.addPlot(project.getId(), "plot", "dramatic situation");
-        Character character = characterService.addCharacter(project.getId(), "character", "description", "imageUrl");
+        Character character = objectsService.addCharacter(project.getId(), "character", "description", "imageUrl");
         estructureService.addCharactertoNetwork(plot.getId(), character.getId(), Enums.Role.PRINCIPAL);
         assertNotNull(estructureService.findCharacterNetworkByCharacterId(plot.getNetwork().getId(), character.getId()));
         
@@ -218,7 +276,7 @@ public class EstructureServiceTest {
         User user = createUser("user");
         Project project = createProject(user);
         Plot plot =estructureService.addPlot(project.getId(), "plot", "dramatic situation");
-        Character character = characterService.addCharacter(project.getId(), "character", "description", "imageUrl");
+        Character character = objectsService.addCharacter(project.getId(), "character", "description", "imageUrl");
         estructureService.addCharactertoNetwork(plot.getId(), character.getId(), Enums.Role.PRINCIPAL);
         assertThrows(DuplicateInstanceException.class, () -> estructureService.addCharactertoNetwork(plot.getId(), character.getId(), Enums.Role.PRINCIPAL));
         
@@ -230,7 +288,7 @@ public class EstructureServiceTest {
         User user = createUser("user");
         Project project = createProject(user);
         Plot plot =estructureService.addPlot(project.getId(), "plot", "dramatic situation");
-        Character character = characterService.addCharacter(project.getId(), "character", "description", "imageUrl");
+        Character character = objectsService.addCharacter(project.getId(), "character", "description", "imageUrl");
         estructureService.addCharactertoNetwork(plot.getId(), character.getId(), Enums.Role.PRINCIPAL);
         assertEquals(estructureService.findCharacterNetworkByCharacterId(plot.getNetwork().getId(), character.getId()).getRole(), Enums.Role.PRINCIPAL);
         estructureService.modifyCharacterRoleInNetwork(plot.getId(), character.getId(), Enums.Role.SUPPORTING_CHARACTER);
@@ -251,7 +309,7 @@ public class EstructureServiceTest {
         User user = createUser("user");
         Project project = createProject(user);
         Plot plot =estructureService.addPlot(project.getId(), "plot", "dramatic situation");
-        Character character = characterService.addCharacter(project.getId(), "character", "description", "imageUrl");
+        Character character = objectsService.addCharacter(project.getId(), "character", "description", "imageUrl");
         estructureService.addCharactertoNetwork(plot.getId(), character.getId(), Enums.Role.PRINCIPAL);
         assertNotNull(estructureService.findCharacterNetworkByCharacterId(plot.getNetwork().getId(), character.getId()));
         estructureService.deleteCharacterfromNetwork(plot.getId(), character.getId());
@@ -271,9 +329,9 @@ public class EstructureServiceTest {
         User user = createUser("user");
         Project project = createProject(user);
         Plot plot = estructureService.addPlot(project.getId(), "plot", "dramatic situation");
-        Character character = characterService.addCharacter(project.getId(), "character", "description", "imageUrl");
+        Character character = objectsService.addCharacter(project.getId(), "character", "description", "imageUrl");
         NetworkNode networkNode1 = estructureService.addCharactertoNetwork(plot.getId(), character.getId(), Enums.Role.PRINCIPAL);
-        Character character2 = characterService.addCharacter(project.getId(), "character2", "description2", "imageUrl2");
+        Character character2 = objectsService.addCharacter(project.getId(), "character2", "description2", "imageUrl2");
         NetworkNode networkNode2 = estructureService.addCharactertoNetwork(plot.getId(), character2.getId(), Enums.Role.PRINCIPAL);
         
         NetworkRelationship relationship = estructureService.addRelationshiptoNetwork(plot.getId(), character.getId(), character2.getId(), Enums.RelationshipType.ALLY);
@@ -293,9 +351,9 @@ public class EstructureServiceTest {
         User user = createUser("user");
         Project project = createProject(user);
         Plot plot = estructureService.addPlot(project.getId(), "plot", "dramatic situation");
-        Character character = characterService.addCharacter(project.getId(), "character", "description", "imageUrl");
+        Character character = objectsService.addCharacter(project.getId(), "character", "description", "imageUrl");
         estructureService.addCharactertoNetwork(plot.getId(), character.getId(), Enums.Role.PRINCIPAL);
-        Character character2 = characterService.addCharacter(project.getId(), "character2", "description2", "imageUrl2");
+        Character character2 = objectsService.addCharacter(project.getId(), "character2", "description2", "imageUrl2");
         estructureService.addCharactertoNetwork(plot.getId(), character2.getId(), Enums.Role.PRINCIPAL);
         
         estructureService.addRelationshiptoNetwork(plot.getId(), character.getId(), character2.getId(), Enums.RelationshipType.ALLY);
@@ -312,9 +370,9 @@ public class EstructureServiceTest {
         User user = createUser("user");
         Project project = createProject(user);
         Plot plot = estructureService.addPlot(project.getId(), "plot", "dramatic situation");
-        Character character = characterService.addCharacter(project.getId(), "character", "description", "imageUrl");
+        Character character = objectsService.addCharacter(project.getId(), "character", "description", "imageUrl");
         estructureService.addCharactertoNetwork(plot.getId(), character.getId(), Enums.Role.PRINCIPAL);
-        Character character2 = characterService.addCharacter(project.getId(), "character2", "description2", "imageUrl2");
+        Character character2 = objectsService.addCharacter(project.getId(), "character2", "description2", "imageUrl2");
         estructureService.addCharactertoNetwork(plot.getId(), character2.getId(), Enums.Role.PRINCIPAL);
         
         NetworkRelationship relationship = estructureService.addRelationshiptoNetwork(plot.getId(), character.getId(), character2.getId(), Enums.RelationshipType.ALLY);
@@ -337,9 +395,9 @@ public class EstructureServiceTest {
         User user = createUser("user");
         Project project = createProject(user);
         Plot plot = estructureService.addPlot(project.getId(), "plot", "dramatic situation");
-        Character character = characterService.addCharacter(project.getId(), "character", "description", "imageUrl");
+        Character character = objectsService.addCharacter(project.getId(), "character", "description", "imageUrl");
         NetworkNode networkNode1 = estructureService.addCharactertoNetwork(plot.getId(), character.getId(), Enums.Role.PRINCIPAL);
-        Character character2 = characterService.addCharacter(project.getId(), "character2", "description2", "imageUrl2");
+        Character character2 = objectsService.addCharacter(project.getId(), "character2", "description2", "imageUrl2");
         NetworkNode networkNode2 = estructureService.addCharactertoNetwork(plot.getId(), character2.getId(), Enums.Role.PRINCIPAL);
         
         NetworkRelationship relationship = estructureService.addRelationshiptoNetwork(plot.getId(), character.getId(), character2.getId(), Enums.RelationshipType.ALLY);

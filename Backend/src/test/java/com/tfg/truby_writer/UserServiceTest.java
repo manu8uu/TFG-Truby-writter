@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.tfg.truby_writer.model.exceptions.DuplicateInstanceException;
 import com.tfg.truby_writer.model.exceptions.InstanceNotFoundException;
-import com.tfg.truby_writer.model.services.User.UserService;
+import com.tfg.truby_writer.model.services.UserService;
 import com.tfg.truby_writer.model.entities.User;
 import com.tfg.truby_writer.model.exceptions.IncorrectLoginException;
 import com.tfg.truby_writer.model.exceptions.IncorrectPasswordException;

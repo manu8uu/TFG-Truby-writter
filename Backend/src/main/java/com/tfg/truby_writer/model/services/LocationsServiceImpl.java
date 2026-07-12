@@ -1,5 +1,4 @@
-package com.tfg.truby_writer.model.services.Locations;
-
+package com.tfg.truby_writer.model.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Slice;
@@ -15,14 +14,13 @@ import com.tfg.truby_writer.model.entities.Location;
 import com.tfg.truby_writer.model.entities.LocationPoint;
 import com.tfg.truby_writer.model.entities.Plot;
 import com.tfg.truby_writer.model.entities.Premise;
-import com.tfg.truby_writer.model.services.Estructure.EstructureService;
+import com.tfg.truby_writer.model.services.EstructureService;
 import com.tfg.truby_writer.model.enums.Enums;
 import com.tfg.truby_writer.model.services.Block;
 
 
 import com.tfg.truby_writer.model.exceptions.DuplicateInstanceException;
 import com.tfg.truby_writer.model.exceptions.InstanceNotFoundException;
-
 
 
 
@@ -95,6 +93,9 @@ public class LocationsServiceImpl implements LocationsService{
         if (locationPointDao.findByLocationIdAndName(location.getId(), name) != null) {
             throw new DuplicateInstanceException("project.entities.locationpoint", name);
         }
+        if (coordX == null || coordX < 0.0f || coordX > 100.0f || coordY == null || coordY < 0.0f || coordY > 100.0f) {
+            throw new IllegalArgumentException("Las coordenadas deben estar entre 0.0 y 100.0. X: " + coordX + ", Y: " + coordY);
+        }
         LocationPoint locationPoint = new LocationPoint();
         locationPoint.setLocation(location);
         locationPoint.setName(name);
@@ -109,6 +110,11 @@ public class LocationsServiceImpl implements LocationsService{
 
     @Override
     public LocationPoint modifyLocationPoint(Long locationPointId, String name, String description, Float coordX,  Float coordY, Enums.MarkerType markerType, String markerIcon) throws InstanceNotFoundException{
+       
+        if (coordX == null || coordX < 0.0f || coordX > 100.0f || coordY == null || coordY < 0.0f || coordY > 100.0f) {
+            throw new IllegalArgumentException("Las coordenadas modificadas deben estar entre 0.0 y 100.0. X: " + coordX + ", Y: " + coordY);
+        }
+        
         LocationPoint locationPoint = locationPointDao.findById(locationPointId).orElseThrow(() -> new InstanceNotFoundException("project.entities.locationpoint", locationPointId));
         locationPoint.setName(name);
         locationPoint.setDescription(description);

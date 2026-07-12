@@ -8,14 +8,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.tfg.truby_writer.model.exceptions.DuplicateInstanceException;
 import com.tfg.truby_writer.model.exceptions.InstanceNotFoundException;
-import com.tfg.truby_writer.model.services.User.UserService;
+import com.tfg.truby_writer.model.services.UserService;
 import com.tfg.truby_writer.model.entities.User;
-import com.tfg.truby_writer.model.services.Project.ProjectService;
 import com.tfg.truby_writer.model.entities.Project;
 import com.tfg.truby_writer.model.entities.Location;
-import com.tfg.truby_writer.model.services.Locations.LocationsService;
+import com.tfg.truby_writer.model.services.LocationsService;
 import com.tfg.truby_writer.model.entities.LocationPoint;
-import com.tfg.truby_writer.model.services.Estructure.EstructureService;
+import com.tfg.truby_writer.model.services.EstructureService;
 import com.tfg.truby_writer.model.entities.Plot;
 import com.tfg.truby_writer.model.services.Block;
 
@@ -36,8 +35,7 @@ public class LocationsServiceTest {
     private EstructureService estructureService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private ProjectService projectService;
+    
     @Autowired
     private LocationsService locationService;
 
@@ -56,7 +54,7 @@ public class LocationsServiceTest {
 	}
 
     private Project createProject(User user) throws DuplicateInstanceException, InstanceNotFoundException{
-        return projectService.createProject(user, "project", "description");
+        return estructureService.createProject(user, "project", "description");
     }
 
     

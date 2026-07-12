@@ -49,7 +49,6 @@ public class Plot {
     @ToString.Exclude
     private Project project;
 
-
     @OneToMany(mappedBy = "plot", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<Location> locations;

@@ -1,4 +1,4 @@
-package com.tfg.truby_writer.model.services.User;
+package com.tfg.truby_writer.model.services;
 
 import java.util.List;
 

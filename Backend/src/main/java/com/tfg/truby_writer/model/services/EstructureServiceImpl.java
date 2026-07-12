@@ -1,4 +1,4 @@
-package com.tfg.truby_writer.model.services.Estructure;
+package com.tfg.truby_writer.model.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Slice;
@@ -15,6 +15,7 @@ import com.tfg.truby_writer.model.entities.NetworkNode;
 import com.tfg.truby_writer.model.entities.NetworkRelationship;
 import com.tfg.truby_writer.model.entities.LineTime;
 import com.tfg.truby_writer.model.services.Block;
+import com.tfg.truby_writer.model.entities.User;
 
 import com.tfg.truby_writer.model.daos.PlotDao;
 import com.tfg.truby_writer.model.daos.PremiseDao;
@@ -25,13 +26,17 @@ import com.tfg.truby_writer.model.daos.NetworkNodeDao;
 import com.tfg.truby_writer.model.daos.NetworkRelationshipDao;
 import com.tfg.truby_writer.model.daos.ProjectDao;
 
+import java.time.LocalDateTime;
 
 
 import com.tfg.truby_writer.model.enums.Enums;
 
-
 import com.tfg.truby_writer.model.exceptions.DuplicateInstanceException;
 import com.tfg.truby_writer.model.exceptions.InstanceNotFoundException;
+import com.tfg.truby_writer.model.exceptions.ProjectPermissionException;
+import com.tfg.truby_writer.model.exceptions.ProjectPermissionException;
+
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +61,54 @@ public class EstructureServiceImpl implements EstructureService{
     @Autowired
     private NetworkRelationshipDao networkRelationshipDao;
     
+    @Autowired
+    private UserService userService;
+
+    @Override
+    public Project createProject(User user, String name, String description) throws DuplicateInstanceException, InstanceNotFoundException{
+
+        if (userService.findUserByUsername(user, user.getUsername()) == null) {
+            throw new InstanceNotFoundException("user.entities.user", user.getId());
+        }
+
+        if (projectDao.existsByName(name)) {
+            throw new DuplicateInstanceException("project.entities.project", name);
+        }
+        
+        Project project = new Project();
+        project.setUser(user);
+        project.setName(name);
+        project.setDescription(description);
+        project.setCreatedAt(LocalDateTime.now());
+        project.setModifiedAt(LocalDateTime.now());
+        project.setPlots(null);
+        project.setCharacters(null);
+        projectDao.save(project);
+
+        return project;
+    }
+
+    @Override
+    public Project getProject(Long id) throws InstanceNotFoundException, InstanceNotFoundException {
+
+        if (id == null) {
+            throw new InstanceNotFoundException("project.entities.project", id);
+        }
+
+        Project project = projectDao.findById(id).orElseThrow(() -> new InstanceNotFoundException("project.entities.project", id));
+        
+        
+        return project;
+    }
+
+    @Override
+    public void deleteProject(User user, Long id) throws InstanceNotFoundException, ProjectPermissionException {
+        Project project = projectDao.findById(id).orElseThrow(() -> new InstanceNotFoundException("project.entities.project", id));
+        if (project.getUser().getId() != user.getId() || userService.findUserByUsername(user, user.getUsername()) == null) {
+           throw new ProjectPermissionException(user.getId(), id);
+        }
+        projectDao.deleteById(id);
+    }
 
 
     @Override
@@ -269,12 +322,16 @@ public class EstructureServiceImpl implements EstructureService{
         }
         return relationship;
     }
-@Override
+
+    @Override
     public NetworkRelationship addRelationshiptoNetwork(Long plotId, Long characterId1, Long characterId2, Enums.RelationshipType relationshipType) throws InstanceNotFoundException, DuplicateInstanceException{
-        // CORRECCIÓN: Buscar la red por PlotId, no por su propia Primary Key
         Network network = networkDao.findByPlotId(plotId);
         if (network == null) {
             throw new InstanceNotFoundException("project.entities.network", plotId);
+        }
+
+        if(characterId1 == characterId2) {
+            throw new IllegalArgumentException("Un personaje no puede crear una relación con sí mismo.");
         }
         
         Character character1 = characterDao.findById(characterId1).orElseThrow(() -> new InstanceNotFoundException("project.entities.character", characterId1));
@@ -285,6 +342,8 @@ public class EstructureServiceImpl implements EstructureService{
         if (networkRelationshipDao.findByNodeFromAndNodeTo(networkNode1, networkNode2) != null) {
              throw new DuplicateInstanceException("project.entities.networkrelationship", characterId1);
         }
+        
+
         NetworkRelationship relationship = new NetworkRelationship();
         relationship.setNetwork(network);
         relationship.setNodeFrom(networkNode1);
@@ -296,7 +355,6 @@ public class EstructureServiceImpl implements EstructureService{
 
     @Override
     public NetworkRelationship modifyRelationship(Long plotId, Long characterId1, Long characterId2, Enums.RelationshipType relationshipType) throws InstanceNotFoundException{
-        // CORRECCIÓN: Usar plotId en lugar de projectId y buscar por findByPlotId
         Network network = networkDao.findByPlotId(plotId);
         if (network == null) {
             throw new InstanceNotFoundException("project.entities.network", plotId);
@@ -321,7 +379,6 @@ public class EstructureServiceImpl implements EstructureService{
 
     @Override
     public void deleteRelationship(Long plotId, Long characterId1, Long characterId2) throws InstanceNotFoundException{
-        // CORRECCIÓN: Usar plotId en lugar de projectId y buscar por findByPlotId
         Network network = networkDao.findByPlotId(plotId);
         if (network == null) {
             throw new InstanceNotFoundException("project.entities.network", plotId);
