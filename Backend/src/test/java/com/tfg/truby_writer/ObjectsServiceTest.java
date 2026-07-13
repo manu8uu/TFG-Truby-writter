@@ -20,6 +20,10 @@ import com.tfg.truby_writer.model.entities.Plot;
 import com.tfg.truby_writer.model.entities.Character;
 import com.tfg.truby_writer.model.services.ObjectsService;
 
+import com.tfg.truby_writer.model.enums.Enums;
+import com.tfg.truby_writer.model.enums.Enums.UserRole;
+
+
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,7 +47,7 @@ public class ObjectsServiceTest {
             .password("password")
             .email(userName + "@example.com")
 			.blocked(false)
-			.role(1)
+			.role(Enums.UserRole.USER)
             .build();
 
             userService.signUp(user);

@@ -20,6 +20,8 @@ import com.tfg.truby_writer.model.services.Block;
 
 
 import com.tfg.truby_writer.model.enums.Enums;
+import com.tfg.truby_writer.model.enums.Enums.UserRole;
+
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,7 +47,7 @@ public class LocationsServiceTest {
             .password("password")
             .email(userName + "@example.com")
 			.blocked(false)
-			.role(1)
+			.role(Enums.UserRole.USER)
             .build();
 
             userService.signUp(user);

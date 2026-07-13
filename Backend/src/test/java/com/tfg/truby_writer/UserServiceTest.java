@@ -15,6 +15,10 @@ import com.tfg.truby_writer.model.exceptions.IncorrectPasswordException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.tfg.truby_writer.model.enums.Enums;
+import com.tfg.truby_writer.model.enums.Enums.UserRole;
+
+
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
@@ -31,13 +35,13 @@ public class UserServiceTest {
             .password("password")
             .email(userName + "@example.com")
 			.blocked(false)
-			.role(0)
+			.role(Enums.UserRole.USER)
             .build();
 	}
 
 	private User createAdminUser(String userName) {
 		User admin = createUser(userName);
-		admin.setRole(1);
+		admin.setRole(Enums.UserRole.ADMIN);
 		return admin;
 	}
 	

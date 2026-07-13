@@ -3,6 +3,7 @@ package com.tfg.truby_writer.rest.dtos;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
 import lombok.*;
 
 @Data
@@ -26,7 +27,7 @@ public class UserDto {
     @Size(max = 100)
     private String email;
 
-    private Integer role;
+    private String role;
     private Boolean blocked;
 
     public interface AllValidations {}

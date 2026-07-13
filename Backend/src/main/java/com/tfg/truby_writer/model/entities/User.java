@@ -2,6 +2,7 @@ package com.tfg.truby_writer.model.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import com.tfg.truby_writer.model.enums.Enums;
 
 @Entity
 @Table(name = "users")
@@ -24,8 +25,9 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
-    private Integer role;
+    private Enums.UserRole role;
 
     @Column(name = "blocked", nullable = false)
     private Boolean blocked;

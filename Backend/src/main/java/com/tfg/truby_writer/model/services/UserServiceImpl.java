@@ -2,6 +2,8 @@ package com.tfg.truby_writer.model.services;
 
 import java.util.Optional;
 
+import com.tfg.truby_writer.model.enums.Enums;
+
 import com.tfg.truby_writer.model.entities.User;
 import com.tfg.truby_writer.model.daos.UserDao;
 import com.tfg.truby_writer.model.exceptions.DuplicateInstanceException;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 
 
@@ -101,14 +104,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	
-	
-
 	// ADMIN
+
 
 	@Override
 	public Block<User> searchUsersByFilter(User user, Boolean blocked, String filter) {
 
-		if (user.getRole() != 1) {
+		if (user.getRole() != Enums.UserRole.ADMIN) {
 			throw new IllegalArgumentException("User does not have admin privileges");
 		}
 
@@ -119,7 +121,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Boolean blockUser(User user, Long id) throws InstanceNotFoundException {
-		if (user.getRole() != 1) {
+		if (user.getRole() != Enums.UserRole.ADMIN) {
 			throw new IllegalArgumentException("User does not have admin privileges");
 		}
 		User targetUser = checkUser(id);
@@ -132,7 +134,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User findUserByUsername(User user, String username) throws InstanceNotFoundException {
-		if (user.getRole() != 1) {
+		if (user.getRole() != Enums.UserRole.ADMIN) {
 			throw new IllegalArgumentException("User does not have admin privileges");
 		}
 		return userDao.findByUsername(username)
@@ -141,7 +143,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Boolean unblockUser(User user, Long id) throws InstanceNotFoundException {
-		if (user.getRole() != 1) {
+		if (user.getRole() != Enums.UserRole.ADMIN) {
 			throw new IllegalArgumentException("User does not have admin privileges");
 		}
 		User targetUser = checkUser(id);

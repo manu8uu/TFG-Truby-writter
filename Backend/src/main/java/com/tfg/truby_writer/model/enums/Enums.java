@@ -23,4 +23,9 @@ public class Enums {
         LAKE,
         OTHER
     }
+
+    public enum UserRole {
+        USER,
+        ADMIN
+    }
 }

@@ -1,7 +1,7 @@
 package com.tfg.truby_writer.rest.dtos;
 
 import com.tfg.truby_writer.model.entities.User;
-import com.tfg.truby_writer.rest.dtos.UserDto;
+import com.tfg.truby_writer.model.enums.Enums.UserRole;
 
 public class UserConversor {
 
@@ -12,7 +12,7 @@ public class UserConversor {
                 .id(user.getId())
                 .username(user.getUsername())
                 .email(user.getEmail())
-                .role(user.getRole())
+                .role(user.getRole() != null ? user.getRole().name() : null)
                 .blocked(user.getBlocked())
                 .build();
     }
@@ -23,15 +23,12 @@ public class UserConversor {
                 .username(userDto.getUsername())
                 .password(userDto.getPassword())
                 .email(userDto.getEmail())
-                .role(userDto.getRole() != null ? userDto.getRole() : 0) // Rol por defecto si aplica
+                .role(userDto.getRole() != null ? UserRole.valueOf(userDto.getRole()) : UserRole.USER)
                 .blocked(userDto.getBlocked() != null ? userDto.getBlocked() : false)
                 .build();
     }
 
-	public static final AuthenticatedUserDto toAuthenticatedUserDto(String serviceToken, User user) {
-
-		return new AuthenticatedUserDto(serviceToken, toUserDto(user));
-
-	}
-
+    public static final AuthenticatedUserDto toAuthenticatedUserDto(String serviceToken, User user) {
+        return new AuthenticatedUserDto(serviceToken, toUserDto(user));
+    }
 }

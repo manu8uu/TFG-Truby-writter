@@ -67,9 +67,7 @@ public class EstructureServiceImpl implements EstructureService{
     @Override
     public Project createProject(User user, String name, String description) throws DuplicateInstanceException, InstanceNotFoundException{
 
-        if (userService.findUserByUsername(user, user.getUsername()) == null) {
-            throw new InstanceNotFoundException("user.entities.user", user.getId());
-        }
+        userService.loginFromId(user.getId());
 
         if (projectDao.existsByName(name)) {
             throw new DuplicateInstanceException("project.entities.project", name);
@@ -104,7 +102,9 @@ public class EstructureServiceImpl implements EstructureService{
     @Override
     public void deleteProject(User user, Long id) throws InstanceNotFoundException, ProjectPermissionException {
         Project project = projectDao.findById(id).orElseThrow(() -> new InstanceNotFoundException("project.entities.project", id));
-        if (project.getUser().getId() != user.getId() || userService.findUserByUsername(user, user.getUsername()) == null) {
+         userService.loginFromId(user.getId());
+
+        if (project.getUser().getId() != user.getId()) {
            throw new ProjectPermissionException(user.getId(), id);
         }
         projectDao.deleteById(id);

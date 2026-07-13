@@ -34,7 +34,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
             .requestMatchers(HttpMethod.POST, "/api/users/signUp").permitAll()
             .requestMatchers(HttpMethod.POST, "/api/users/login").permitAll()
         	.requestMatchers(HttpMethod.POST, "/api/users/loginFromId").hasRole("USER")
-            .requestMatchers(HttpMethod.POST, "/api/users/changePassword").hasRole("USER")
+            .requestMatchers(HttpMethod.POST, "/api/users/*/changePassword").authenticated()
             .requestMatchers(HttpMethod.GET, "/api/users/search").hasRole("ADMIN")
             .requestMatchers(HttpMethod.GET, "/api/users/username/*").hasRole("ADMIN")
             .requestMatchers(HttpMethod.POST, "/api/users/*/block").hasRole("ADMIN")
