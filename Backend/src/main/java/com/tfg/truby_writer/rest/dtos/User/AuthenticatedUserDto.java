@@ -1,4 +1,4 @@
-package com.tfg.truby_writer.rest.dtos;
+package com.tfg.truby_writer.rest.dtos.User;
 
 import lombok.*;
 

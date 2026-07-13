@@ -128,6 +128,9 @@ public class UserServiceImpl implements UserService {
 		if (targetUser.getBlocked()== true) {
 			return false;
 		}
+		if (targetUser.getRole() == Enums.UserRole.ADMIN) {
+			throw new IllegalArgumentException("Cannot block an admin user");
+		}
 		targetUser.setBlocked(true);
 		return userDao.save(targetUser) != null;
 	}

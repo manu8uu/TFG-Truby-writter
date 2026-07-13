@@ -18,6 +18,7 @@ import com.tfg.truby_writer.model.services.UserService;
 import com.tfg.truby_writer.model.services.Block;
 import com.tfg.truby_writer.rest.common.JwtGenerator;
 import com.tfg.truby_writer.rest.common.JwtInfo;
+import com.tfg.truby_writer.rest.dtos.User.*;
 import com.tfg.truby_writer.rest.dtos.*;
 
 import java.net.URI;
