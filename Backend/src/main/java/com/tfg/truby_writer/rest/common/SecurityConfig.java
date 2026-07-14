@@ -54,14 +54,14 @@ public class SecurityConfig {
 
 				//PLOT
 	            .requestMatchers(HttpMethod.POST, "/api/structure/projects/{projectId}/createPlot").hasRole("USER")
-            	.requestMatchers(HttpMethod.PUT, "/api/structure/plots/{plotId}").hasRole("USER")
-            	.requestMatchers(HttpMethod.DELETE, "/api/structure/plots/{plotId}").hasRole("USER")
+            	.requestMatchers(HttpMethod.PUT, "/api/structure/plots/modify/{plotId}").hasRole("USER")
+            	.requestMatchers(HttpMethod.DELETE, "/api/structure/plots/delete/{plotId}").hasRole("USER")
             	.requestMatchers(HttpMethod.GET, "/api/structure/plots/{plotId}").hasRole("USER")
 
 				//PREMISE
-            	.requestMatchers(HttpMethod.POST, "/api/structure/plots/{plotId}/premises").hasRole("USER")
-            	.requestMatchers(HttpMethod.PUT, "/api/structure/premises/{premiseId}").hasRole("USER")
-            	.requestMatchers(HttpMethod.DELETE, "/api/structure/premises/{premiseId}").hasRole("USER")
+            	.requestMatchers(HttpMethod.POST, "/api/structure/plots/{plotId}/createPremise").hasRole("USER")
+            	.requestMatchers(HttpMethod.PUT, "/api/structure/premises/modify/{premiseId}").hasRole("USER")
+            	.requestMatchers(HttpMethod.DELETE, "/api/structure/premises/delete/{premiseId}").hasRole("USER")
             	.requestMatchers(HttpMethod.GET, "/api/structure/premises/{premiseId}").hasRole("USER")
             	.requestMatchers(HttpMethod.GET, "/api/structure/plots/{plotId}/premises/search").hasRole("USER")
 

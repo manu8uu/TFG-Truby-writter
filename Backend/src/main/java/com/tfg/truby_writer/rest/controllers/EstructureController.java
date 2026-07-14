@@ -51,7 +51,7 @@ public class EstructureController {
         User user = User.builder().id(userId).build();
     
         estructureService.deleteProject(user, id);
-    }
+       }
 
     // PLOT 
 
@@ -63,7 +63,7 @@ public class EstructureController {
         return PlotConversor.toPlotDto(plot);
     }
 
-    @PutMapping("/plots/{plotId}")
+    @PutMapping("/plots/modify/{plotId}")
     public PlotDto modifyPlot(@PathVariable Long plotId, @Valid @RequestBody PlotDto dto) throws InstanceNotFoundException {
         Plot plot = estructureService.modifyPlot(
                 plotId, 
@@ -80,13 +80,13 @@ public class EstructureController {
         return PlotConversor.toPlotDto(plot);
     }
 
-    @DeleteMapping("/plots/deletePlot/{plotId}")
+    @DeleteMapping("/plots/delete/{plotId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePlot(@PathVariable Long plotId) throws InstanceNotFoundException {
         estructureService.deletePlot(plotId);
     }
 
-    @GetMapping("/plots/findPlot/{plotId}")
+    @GetMapping("/plots/{plotId}")
     public PlotDto findPlotById(@PathVariable Long plotId) throws InstanceNotFoundException {
         Plot plot = estructureService.findPlotById(plotId);
         return PlotConversor.toPlotDto(plot);
@@ -102,7 +102,7 @@ public class EstructureController {
         return PremiseConversor.toPremiseDto(premise);
     }
 
-    @PutMapping("/premises/{premiseId}")
+    @PutMapping("/premises/modify/{premiseId}")
     public PremiseDto modifyPremise(@PathVariable Long premiseId, @Valid @RequestBody PremiseDto dto) throws InstanceNotFoundException {
         Premise premise = estructureService.modifyPremise(
                 premiseId, 
@@ -117,7 +117,7 @@ public class EstructureController {
         return PremiseConversor.toPremiseDto(premise);
     }
 
-    @DeleteMapping("/premises/deletePremise/{premiseId}")
+    @DeleteMapping("/premises/delete/{premiseId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePremise(@PathVariable Long premiseId) throws InstanceNotFoundException {
         estructureService.deletePremise(premiseId);
