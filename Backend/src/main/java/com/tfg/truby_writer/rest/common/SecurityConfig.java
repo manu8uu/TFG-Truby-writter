@@ -65,6 +65,21 @@ public class SecurityConfig {
             	.requestMatchers(HttpMethod.GET, "/api/structure/premises/{premiseId}").hasRole("USER")
             	.requestMatchers(HttpMethod.GET, "/api/structure/plots/{plotId}/premises/search").hasRole("USER")
 
+				//CHARACTERS
+				.requestMatchers(HttpMethod.POST, "/api/structure/projects/{projectId}/createCharacter").hasRole("USER")
+				.requestMatchers(HttpMethod.PUT, "/api/structure/characters/modify/{characterId}").hasRole("USER")
+				.requestMatchers(HttpMethod.DELETE, "/api/structure/characters/delete/{characterId}").hasRole("USER")
+				.requestMatchers(HttpMethod.GET, "/api/structure/characters/{characterId}").hasRole("USER")
+				.requestMatchers(HttpMethod.GET, "/api/structure/projects/{projectId}/characters/search").hasRole("USER")
+				.requestMatchers(HttpMethod.GET, "/api/structure/projects/{projectId}/characters/byName").hasRole("USER")
+
+				//EVENTS & LINE TIMES
+				.requestMatchers(HttpMethod.POST, "/api/structure/plots/{timelineId}/createEvent").hasRole("USER")
+				.requestMatchers(HttpMethod.PUT, "/api/structure/events/modify/{eventId}").hasRole("USER")
+				.requestMatchers(HttpMethod.DELETE, "/api/structure/events/delete/{eventId}").hasRole("USER")
+				.requestMatchers(HttpMethod.GET, "/api/structure/plots/{timelineId}/events/search").hasRole("USER")
+				//.requestMatchers(HttpMethod.GET, "/api/structure/plots/{plotId}/lineTime").hasRole("USER")
+
 				//NETWORK NODES & RELATIONSHIPS
             	.requestMatchers(HttpMethod.POST, "/api/structure/plots/{plotId}/network/characters").hasRole("USER")
             	.requestMatchers(HttpMethod.PUT, "/api/structure/plots/{plotId}/network/characters/{characterId}").hasRole("USER")
@@ -73,6 +88,19 @@ public class SecurityConfig {
             	.requestMatchers(HttpMethod.PUT, "/api/structure/plots/{plotId}/network/relationships").hasRole("USER")
             	.requestMatchers(HttpMethod.DELETE, "/api/structure/plots/{plotId}/network/relationships").hasRole("USER")
 
+
+				//LOCATIONS
+				.requestMatchers(HttpMethod.POST, "/api/structure/plots/*/createLocation").hasRole("USER")
+				.requestMatchers(HttpMethod.PUT, "/api/structure/modify/*").hasRole("USER")
+				.requestMatchers(HttpMethod.DELETE, "/api/structure/delete/*").hasRole("USER")
+				.requestMatchers(HttpMethod.GET, "/api/structure/*").hasRole("USER")
+				.requestMatchers(HttpMethod.GET, "/api/structure/plots/*/search").hasRole("USER")
+
+				// LOCATION POINTS
+				.requestMatchers(HttpMethod.POST, "/api/structure/*/createPoint").hasRole("USER")
+				.requestMatchers(HttpMethod.PUT, "/api/structure/points/modify/*").hasRole("USER")
+				.requestMatchers(HttpMethod.DELETE, "/api/structure/points/delete/*").hasRole("USER")
+				.requestMatchers(HttpMethod.GET, "/api/structure/points/*").hasRole("USER")
 				.anyRequest().hasRole("USER"));
 
 		return http.build();
