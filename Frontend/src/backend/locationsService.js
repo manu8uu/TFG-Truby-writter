@@ -1,4 +1,4 @@
-import { appFetch } from '../../backend/appFetch';
+import { appFetch } from './appFetch';
 
 const BASE_PATH = '/structure';
 
