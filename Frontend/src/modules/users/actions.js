@@ -4,11 +4,12 @@ import backend from '../../backend';
 export const signUp = (user, onSuccess, onErrors) => async dispatch => {
     try {
         const response = await backend.userService.signUp(user);
-        
-        if (response && response.ok !== false) {
-            const authenticatedUser = response.payload || response;
-            
-          dispatch(loginCompleted(authenticatedUser));
+
+        // appFetch devuelve { ok: true, payload: { serviceToken, userDto } }
+        if (response && response.ok && response.payload) {
+            // Guardamos en Redux el objeto devuelto en payload
+            dispatch(signUpCompleted(response.payload));
+            dispatch(loginCompleted(response.payload));
             
             if (onSuccess) onSuccess();
         } else {
@@ -28,9 +29,8 @@ export const login = (userName, password, onSuccess, onErrors) => async dispatch
     try {
         const response = await backend.userService.login(userName, password);
 
-        if (response && response.ok !== false) {
-            const authenticatedUser = response.payload || response;
-            dispatch(loginCompleted(authenticatedUser));
+        if (response && response.ok && response.payload) {
+            dispatch(loginCompleted(response.payload));
             if (onSuccess) onSuccess();
         } else {
             if (onErrors) onErrors(response?.payload || response);

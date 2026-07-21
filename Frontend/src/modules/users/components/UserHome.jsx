@@ -18,7 +18,6 @@ const UserHome = () => {
     return (
         <Container className="py-5" style={{ maxWidth: '900px' }}>
             
-            {/* Header / Encabezado superior */}
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <div>
                     <h1 className="fw-bold text-dark mb-1" style={{ fontSize: '2.25rem' }}>
@@ -32,9 +31,7 @@ const UserHome = () => {
                     </p>
                 </div>
 
-                {/* Acciones de la derecha: Nuevo Proyecto + Cerrar Sesión */}
                 <div className="d-flex align-items-center gap-2">
-                    {/* Botón "+ Nuevo Proyecto" */}
                     <Button 
                         className="px-4 py-2 border-0 text-white fw-semibold shadow-sm d-flex align-items-center gap-2"
                         style={{ 
@@ -46,7 +43,6 @@ const UserHome = () => {
                         <FormattedMessage id="project.projects.UserHome.newProject" defaultMessage="Nuevo Proyecto" />
                     </Button>
 
-                    {/* Botón de Cerrar Sesión */}
                     <Button 
                         variant="outline-danger"
                         onClick={handleLogout}
@@ -65,7 +61,6 @@ const UserHome = () => {
                 </div>
             </div>
 
-            {/* Tarjeta de Proyecto Vacía (Modelo Visual del Wireframe) */}
             <Card 
                 className="border-0 shadow-sm p-4 position-relative mb-4"
                 style={{ 
@@ -74,7 +69,6 @@ const UserHome = () => {
                     border: '1px solid #e2e8f0'
                 }}
             >
-                {/* Cabecera: Categoría y Botón de Cerrar */}
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <div className="d-flex align-items-center gap-2 text-muted small fw-medium">
                         <i className="bi bi-folder2-open fs-5 text-primary"></i>
@@ -88,7 +82,6 @@ const UserHome = () => {
                     </Button>
                 </div>
 
-                {/* Cuerpo: Título y Descripción */}
                 <div className="mb-4">
                     <h3 className="fw-bold text-dark mb-2 fs-4">
                         Título

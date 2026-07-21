@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-import users from '../users';
+//import users from '../users';
 
 import * as actionTypes from './actionTypes';
 
@@ -12,11 +12,11 @@ const user = (state = initialState.user, action) => {
     switch (action.type) {
 
         case actionTypes.SIGN_UP_COMPLETED:
-            return action.authenticatedUser.user;
+            return action.authenticatedUser.userDto || action.authenticatedUser.user || null;
 
         case actionTypes.LOGIN_COMPLETED:
-            return action.authenticatedUser.user;
-
+            return action.authenticatedUser.userDto || action.authenticatedUser.user || null;
+        
         case actionTypes.LOGOUT:
             return initialState.user;
 
