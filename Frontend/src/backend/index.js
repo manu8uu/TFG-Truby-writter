@@ -7,3 +7,11 @@ import * as locationsService from './locationsService';
 export {default as NetworkError} from './NetworkError';
 
 export {init, userService, estructureService, objectsService, locationsService};
+
+export default {
+    init,
+    userService,
+    estructureService,
+    objectsService,
+    locationsService
+};

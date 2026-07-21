@@ -1,11 +1,10 @@
 import {appFetch, setServiceToken, getServiceToken, removeServiceToken, setReauthenticationCallback, setNetworkErrorCallback} from './appFetch';
 
-const BASE_PATH = '/users';
+const BASE_PATH = '/api/users';
 
-
-export const singUp = async (userDto, reauthenticationCallback) => {
-    const response = await appFetch('POST', `${BASE_PATH}/signup`, userDto);
-    if (response.ok && response.payload) {
+export const signUp = async (userDto, reauthenticationCallback) => {
+    const response = await appFetch('POST', `${BASE_PATH}/signUp`, userDto);
+    if (response && response.ok && response.payload) {
         setServiceToken(response.payload.serviceToken);
         setReauthenticationCallback(reauthenticationCallback);
     }

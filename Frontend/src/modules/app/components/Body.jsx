@@ -1,31 +1,30 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import Container from 'react-bootstrap/Container';
 import { Route, Routes } from 'react-router-dom';
 import AppGlobalComponents from './AppGlobalComponents';
 import Home from './Home';
+import users, { Login, SignUp, Logout, ChangePassword, UserHome } from '../../users';
 
-const Body = () => (
+const Body = () => {
+
+    const loggedIn = useSelector(users.selectors.isLoggedIn);
+    
+    return (
     <Container className="py-4 flex-grow-1">
-        {/* Componente para interceptar y pintar alertas o errores globales */}
+        {}
         <AppGlobalComponents />
-        
         <Routes>
-            {/* Ruta por defecto que carga la pantalla de inicio */}
             <Route path="/" element={<Home />} />
-            
-            {/* 
-              Dejamos los huecos preparados para los futuros módulos. 
-              Por ahora, si entras a estas URLs no pintarán nada hasta que 
-              importemos sus respectivos componentes de negocio.
-            */}
-            <Route path="/locations/*" element={<div>Locations Module</div>} />
-            <Route path="/objects/*" element={<div>Objects Module</div>} />
-            <Route path="/users/*" element={<div>Users Module</div>} />
-            
-            {/* Ruta comodín por si el usuario introduce una URL que no existe */}
+            {loggedIn && <Route path="/users/change-password" element={<ChangePassword/>}/>}
+            {loggedIn && <Route path="/users/logout" element={<Logout/>}/>}
+            {loggedIn && <Route path="/users/UserHome" element={<UserHome/>}/>}
+            {!loggedIn && <Route path="/users/login" element={<Login/>}/>}
+            {!loggedIn && <Route path="/users/signup" element={<SignUp/>}/>}
             <Route path="*" element={<Home />} />
         </Routes>
     </Container>
-);
+    );
+};
 
 export default Body;

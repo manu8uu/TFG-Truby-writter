@@ -5,3 +5,51 @@ a:not([class]) {
 a:not([class]):hover {
     text-decoration: underline;
 }
+.login-card {
+    border: none !important;
+    border-radius: 1rem !important;
+    box-shadow: 0 10px 25px rgba(111, 66, 193, 0.15) !important;
+    overflow: hidden;
+}
+
+.login-header {
+    background: linear-gradient(135deg, #6f42c1 0%, #4a238a 100%) !important;
+    color: white !important;
+    border-bottom: none !important;
+    padding: 1.25rem 1.5rem !important;
+    font-weight: 600;
+}
+
+.btn-purple {
+    background: linear-gradient(135deg, #6f42c1 0%, #52279b 100%);
+    border: none;
+    color: white;
+    padding: 0.6rem 1.5rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-purple:hover {
+    background: linear-gradient(135deg, #52279b 0%, #3e1b78 100%);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(111, 66, 193, 0.3);
+}
+
+.form-control-purple:focus {
+    border-color: #6f42c1;
+    box-shadow: 0 0 0 0.25rem rgba(111, 66, 193, 0.25);
+}
+
+.purple-link {
+    color: #6f42c1;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.purple-link:hover {
+    color: #4a238a;
+    text-decoration: underline;
+}

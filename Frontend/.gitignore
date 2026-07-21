@@ -10,7 +10,7 @@ build/
 # Variables de entorno y secretos locales
 .env
 .env.local
-.env.development.local
+velopment.local
 .env.test.local
 .env.production.local
 

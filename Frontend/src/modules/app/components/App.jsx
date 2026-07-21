@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'; // <-- Añade "React," aquí
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import Header from './Header';
@@ -9,7 +9,22 @@ const App = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        // Bloque de autenticación comentado temporalmente
+        const tryLoginFromServiceToken = async () => {
+    try {
+        const response = await backend.userService.tryLoginFromServiceToken(
+            () => dispatch(users.actions.logout())
+        );
+        if (response && response.ok) {
+            dispatch(users.actions.loginCompleted(response.payload));
+        } else {
+            // Si el backend responde con error (401, 500, etc.), limpiamos la sesión local
+            dispatch(users.actions.logout());
+        }
+    } catch (error) {
+        // En caso de fallo de red o error 500 del servidor
+        dispatch(users.actions.logout());
+    }
+};
     }, [dispatch]);
 
     return (
