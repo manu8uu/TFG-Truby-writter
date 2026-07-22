@@ -51,7 +51,6 @@ public class EstructureServiceImpl implements EstructureService{
     private PlotDao plotDao;
     @Autowired
     private PremiseDao premiseDao;
-
     @Autowired
     private CharacterDao characterDao;
     @Autowired
@@ -63,6 +62,7 @@ public class EstructureServiceImpl implements EstructureService{
     
     @Autowired
     private UserService userService;
+
 
     @Override
     public Project createProject(User user, String name, String description) throws DuplicateInstanceException, InstanceNotFoundException{
@@ -108,6 +108,12 @@ public class EstructureServiceImpl implements EstructureService{
            throw new ProjectPermissionException(user.getId(), id);
         }
         projectDao.deleteById(id);
+    }
+
+    @Override
+    public List<Project> getAllProjectsByUserId(Long userId) throws InstanceNotFoundException {
+        User user = userService.loginFromId(userId);
+        return projectDao.findAllProjectsByUserId(userId);
     }
 
 

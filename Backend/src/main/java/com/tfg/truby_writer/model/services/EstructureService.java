@@ -32,6 +32,8 @@ public interface EstructureService {
         
     void deleteProject(User user,Long id) throws InstanceNotFoundException, ProjectPermissionException;
 
+    List<Project> getAllProjectsByUserId(Long userId) throws InstanceNotFoundException;
+
 
 
     // PLOTS

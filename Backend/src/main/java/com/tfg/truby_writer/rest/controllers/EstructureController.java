@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/structure")
 public class EstructureController {
@@ -52,6 +54,12 @@ public class EstructureController {
     
         estructureService.deleteProject(user, id);
        }
+    
+    @GetMapping("/projects/getAllProjectsByUserId/{userId}")
+    public List<ProjectDto> getAllProjectsByUserId(@PathVariable Long userId) throws InstanceNotFoundException {
+        List<Project> projects = estructureService.getAllProjectsByUserId(userId);
+        return ProjectConversor.toProjectDtoList(projects);
+    }
 
     // PLOT 
 

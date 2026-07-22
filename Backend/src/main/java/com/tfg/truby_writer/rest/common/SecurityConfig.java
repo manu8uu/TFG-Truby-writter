@@ -51,6 +51,7 @@ public class SecurityConfig {
             	.requestMatchers(HttpMethod.POST, "/api/structure/projects/createProject").hasRole("USER")
             	.requestMatchers(HttpMethod.GET, "/api/structure/projects/{id}").hasRole("USER")
             	.requestMatchers(HttpMethod.DELETE, "/api/structure/projects/deleteProject/{id}").hasRole("USER")
+				.requestMatchers(HttpMethod.GET, "/api/structure/projects/getAllProjectsByUserId/{userId}").hasRole("USER")
 
 				//PLOT
 	            .requestMatchers(HttpMethod.POST, "/api/structure/projects/{projectId}/createPlot").hasRole("USER")
