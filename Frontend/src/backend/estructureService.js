@@ -1,6 +1,6 @@
 import { appFetch } from './appFetch';
 
-const BASE_PATH = '/structure';
+const BASE_PATH = '/api/structure';
 
 
 export const createProject = async (dto) => {
@@ -13,6 +13,10 @@ export const getProject = async (id) => {
 
 export const deleteProject = async (id) => {
     return await appFetch('DELETE', `${BASE_PATH}/projects/deleteProject/${id}`);
+};
+
+export const getAllProjectsByUserId = async (userId) => {
+    return await appFetch('GET', `${BASE_PATH}/projects/getAllProjectsByUserId/${userId}`);
 };
 
 export const addPlot = async (projectId, dto) => {

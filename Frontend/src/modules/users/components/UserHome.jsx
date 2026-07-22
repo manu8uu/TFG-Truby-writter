@@ -1,23 +1,39 @@
-import React from 'react';
-import { Container, Card, Button } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Container, Button, Modal } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import users from '../index'; 
+import CreateProject from '../../estructure/components/CreateProject';
+import FindAllProjects from '../../estructure/components/FindAllProjects';
 
 const UserHome = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    // Contador que cambia cada vez que se crea un proyecto
+    const [reloadKey, setReloadKey] = useState(0);
+
+    const [showCreateProjectModal, setShowCreateProjectModal] = useState(false);
+    const handleOpenModal = () => setShowCreateProjectModal(true);
+    const handleCloseModal = () => setShowCreateProjectModal(false);
 
     const handleLogout = () => {
         dispatch(users.actions.logout());
         navigate('/users/login');
     };
 
+    // Al crear un proyecto, incrementamos la key para forzar la recarga en FindAllProjects
+    const handleProjectCreated = () => {
+        handleCloseModal();
+        setReloadKey(prev => prev + 1);
+    };
+
     return (
         <Container className="py-5" style={{ maxWidth: '900px' }}>
             
+            {/* Cabecera */}
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <div>
                     <h1 className="fw-bold text-dark mb-1" style={{ fontSize: '2.25rem' }}>
@@ -33,24 +49,22 @@ const UserHome = () => {
 
                 <div className="d-flex align-items-center gap-2">
                     <Button 
-                        className="px-4 py-2 border-0 text-white fw-semibold shadow-sm d-flex align-items-center gap-2"
+                        onClick={handleOpenModal}
+                        className="px-4 py-2 border-0 fw-semibold shadow-sm d-flex align-items-center gap-2 text-white"
                         style={{ 
-                            background: 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)',
-                            borderRadius: '0.75rem'
+                            borderRadius: '0.75rem',
+                            background: 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)'
                         }}
                     >
                         <i className="bi bi-plus-lg fs-5"></i>
-                        <FormattedMessage id="project.projects.UserHome.newProject" defaultMessage="Nuevo Proyecto" />
+                        <FormattedMessage id="project.users.UserHome.newProject" defaultMessage="Nuevo Proyecto" />
                     </Button>
 
                     <Button 
                         variant="outline-danger"
                         onClick={handleLogout}
                         className="px-3 py-2 fw-semibold d-flex align-items-center gap-2"
-                        style={{ 
-                            borderRadius: '0.75rem',
-                            borderWidth: '1.5px'
-                        }}
+                        style={{ borderRadius: '0.75rem', borderWidth: '1.5px' }}
                         title="Cerrar Sesión"
                     >
                         <i className="bi bi-box-arrow-right fs-5"></i>
@@ -61,45 +75,28 @@ const UserHome = () => {
                 </div>
             </div>
 
-            <Card 
-                className="border-0 shadow-sm p-4 position-relative mb-4"
-                style={{ 
-                    borderRadius: '1.25rem',
-                    backgroundColor: '#ffffff',
-                    border: '1px solid #e2e8f0'
-                }}
+            {/* Le pasamos reloadKey como prop para refrescar cuando cambie */}
+            <FindAllProjects reloadTrigger={reloadKey} />
+
+            {/* Modal para Crear Proyecto */}
+            <Modal 
+                show={showCreateProjectModal} 
+                onHide={handleCloseModal}
+                centered
+                contentClassName="border-0 shadow-lg"
+                style={{ borderRadius: '1.25rem' }}
             >
-                <div className="d-flex justify-content-between align-items-center mb-3">
-                    <div className="d-flex align-items-center gap-2 text-muted small fw-medium">
-                        <i className="bi bi-folder2-open fs-5 text-primary"></i>
-                        <span>Mis Proyectos</span>
-                    </div>
-                    <Button 
-                        variant="link" 
-                        className="text-muted p-0 border-0 shadow-none"
-                    >
-                        <i className="bi bi-x-lg fs-5"></i>
-                    </Button>
-                </div>
+                <Modal.Header closeButton className="border-0 pt-4 px-4 pb-0">
+                    <Modal.Title className="fw-bold text-dark d-flex align-items-center gap-2 fs-5">
+                        <i className="bi bi-journal-plus text-primary"></i>
+                        <FormattedMessage id="project.projects.CreateProject.title" defaultMessage="Nuevo Proyecto" />
+                    </Modal.Title>
+                </Modal.Header>
 
-                <div className="mb-4">
-                    <h3 className="fw-bold text-dark mb-2 fs-4">
-                        Título
-                    </h3>
-                    <p className="text-secondary small mb-0">
-                        Descripción
-                    </p>
-                </div>
-
-                <div className="d-flex justify-content-between align-items-center pt-3 border-top text-muted small">
-                    <div>
-                        <span>Última fecha de modificación</span>
-                    </div>
-                    <div>
-                        <span>Número de tramas</span>
-                    </div>
-                </div>
-            </Card>
+                <Modal.Body className="p-4">
+                    <CreateProject onSuccess={handleProjectCreated} />
+                </Modal.Body>
+            </Modal>
 
         </Container>
     );
