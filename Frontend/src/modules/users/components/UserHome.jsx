@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import users from '../index'; // Ajusta la ruta a tus actions de users si es necesario
+import users from '../index'; 
 
 const UserHome = () => {
     const dispatch = useDispatch();
@@ -91,7 +91,6 @@ const UserHome = () => {
                     </p>
                 </div>
 
-                {/* Pie de la tarjeta: Fecha y Número de Tramas */}
                 <div className="d-flex justify-content-between align-items-center pt-3 border-top text-muted small">
                     <div>
                         <span>Última fecha de modificación</span>

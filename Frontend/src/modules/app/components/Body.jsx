@@ -4,7 +4,7 @@ import Container from 'react-bootstrap/Container';
 import { Route, Routes } from 'react-router-dom';
 import AppGlobalComponents from './AppGlobalComponents';
 import Home from './Home';
-import users, { Login, SignUp, Logout, ChangePassword, UserHome } from '../../users';
+import users, { Login, SignUp, Logout, ChangePassword, UserHome, UserProfile } from '../../users';
 
 const Body = () => {
 
@@ -19,8 +19,10 @@ const Body = () => {
             {loggedIn && <Route path="/users/change-password" element={<ChangePassword/>}/>}
             {loggedIn && <Route path="/users/logout" element={<Logout/>}/>}
             {loggedIn && <Route path="/users/UserHome" element={<UserHome/>}/>}
+            {loggedIn && <Route path="/users/profile" element={<UserProfile/>}/>}
             {!loggedIn && <Route path="/users/login" element={<Login/>}/>}
             {!loggedIn && <Route path="/users/signup" element={<SignUp/>}/>}
+
             <Route path="*" element={<Home />} />
         </Routes>
     </Container>

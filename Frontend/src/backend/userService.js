@@ -39,11 +39,11 @@ export const tryLoginFromServiceToken = async (reauthenticationCallback) => {
 
 export const logout = () => removeServiceToken();
 
-export const changePassword = async (userDto, reauthenticationCallback) => {
-    const response = await appFetch('PUT', `${BASE_PATH}/changePassword`, userDto);
-    if (response.ok) {
-        setReauthenticationCallback(reauthenticationCallback);
-    }
+export const changePassword = async (userId, oldPassword, newPassword) => {
+    const response = await appFetch('POST', `${BASE_PATH}/${userId}/changePassword`, {
+        oldPassword,
+        newPassword
+    });
     return response;
 }
 

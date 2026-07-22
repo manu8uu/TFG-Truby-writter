@@ -17,7 +17,6 @@ const Home = () => {
         >
             <Container style={{ maxWidth: '520px' }}>
                 {!isLoggedIn ? (
-                    /* LANDING PÚBLICA MINIMALISTA */
                     <Card 
                         className="border-0 text-center p-4 p-sm-5"
                         style={{ 
@@ -29,7 +28,6 @@ const Home = () => {
                     >
                         <Card.Body className="p-0">
                             
-                            {/* 1. Imagen Central */}
                             <div className="mb-4 text-center">
                                 <img 
                                     src="/Home.png" 
@@ -43,7 +41,6 @@ const Home = () => {
                                 />
                             </div>
 
-                            {/* 2. Texto Breve */}
                             <h3 className="fw-bold text-dark mb-2">
                                 Truby-Writer
                             </h3>
@@ -51,7 +48,6 @@ const Home = () => {
                                 Diseña y organiza la estructura narrativa de tus historias.
                             </p>
 
-                            {/* 3. Opciones únicas: Iniciar Sesión o Registrarse */}
                             <div className="d-grid gap-2 col-11 mx-auto">
                                 <Button 
                                     as={Link} 
@@ -84,7 +80,6 @@ const Home = () => {
                         </Card.Body>
                     </Card>
                 ) : (
-                    /* DOK / PANEL SI YA ESTÁ LOGUEADO */
                     <Card 
                         className="border-0 p-4 p-sm-5 text-center"
                         style={{ 
@@ -94,28 +89,7 @@ const Home = () => {
                             border: '1px solid #f1f5f9'
                         }}
                     >
-                        <Card.Body className="p-0">
-                            <h3 className="fw-bold text-dark mb-2">
-                                ¡Hola, {user?.userName || 'Escritor'}! 👋
-                            </h3>
-                            <p className="text-muted mb-4">
-                                Has iniciado sesión correctamente.
-                            </p>
 
-                            <div className="d-grid gap-2">
-                                <Button 
-                                    as={Link} 
-                                    to="/locations" 
-                                    className="py-2.5 border-0 text-white fw-semibold"
-                                    style={{ 
-                                        background: 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)',
-                                        borderRadius: '0.75rem' 
-                                    }}
-                                >
-                                    Ir a Localizaciones
-                                </Button>
-                            </div>
-                        </Card.Body>
                     </Card>
                 )}
             </Container>

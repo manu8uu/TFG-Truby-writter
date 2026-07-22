@@ -8,6 +8,7 @@ export {default as SignUp} from './components/SignUp';
 export {default as ChangePassword} from './components/ChangePassword';
 export {default as Logout} from './components/Logout';
 export { default as UserHome } from './components/UserHome';
+export { default as UserProfile } from './components/UserProfile';
 
 export default {
     actions,

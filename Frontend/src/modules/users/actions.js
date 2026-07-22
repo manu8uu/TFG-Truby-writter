@@ -5,9 +5,7 @@ export const signUp = (user, onSuccess, onErrors) => async dispatch => {
     try {
         const response = await backend.userService.signUp(user);
 
-        // appFetch devuelve { ok: true, payload: { serviceToken, userDto } }
         if (response && response.ok && response.payload) {
-            // Guardamos en Redux el objeto devuelto en payload
             dispatch(signUpCompleted(response.payload));
             dispatch(loginCompleted(response.payload));
             
