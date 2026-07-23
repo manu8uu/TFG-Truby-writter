@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Card, Spinner, Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import users from '../../users';
 import backend from '../../../backend';
@@ -8,6 +9,7 @@ import backend from '../../../backend';
 const FindAllProjects = ({ reloadTrigger }) => {
     const user = useSelector(users.selectors.getUser);
     const userId = user?.id || user?.userId;
+    const navigate = useNavigate();
 
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -50,7 +52,8 @@ const FindAllProjects = ({ reloadTrigger }) => {
         fetchProjects();
     }, [fetchProjects, reloadTrigger]);
 
-    const handleDelete = async (projectId, projectName) => {
+    const handleDelete = async (e, projectId, projectName) => {
+        e.stopPropagation(); // evita que el click dispare la navegación
         const confirmed = window.confirm(
             `¿Seguro que quieres eliminar "${projectName}"? Esta acción no se puede deshacer.`
         );
@@ -59,7 +62,6 @@ const FindAllProjects = ({ reloadTrigger }) => {
         try {
             setDeletingId(projectId);
             await backend.estructureService.deleteProject(projectId);
-            // Actualización optimista: quitamos el proyecto sin volver a pedir toda la lista
             setProjects((prev) => prev.filter((p) => p.id !== projectId));
         } catch (error) {
             console.error("Error al eliminar el proyecto:", error);
@@ -67,6 +69,10 @@ const FindAllProjects = ({ reloadTrigger }) => {
         } finally {
             setDeletingId(null);
         }
+    };
+
+    const handleOpenProject = (project) => {
+        navigate(`/projects/${project.id}`, { state: { project } });
     };
 
     if (loading) {
@@ -94,8 +100,10 @@ const FindAllProjects = ({ reloadTrigger }) => {
                     style={{ 
                         borderRadius: '1.25rem',
                         backgroundColor: '#ffffff',
-                        border: '1px solid #e2e8f0'
+                        border: '1px solid #e2e8f0',
+                        cursor: 'pointer'
                     }}
+                    onClick={() => handleOpenProject(project)}
                 >
                     <div className="d-flex justify-content-between align-items-center mb-3">
                         <div className="d-flex align-items-center gap-2 text-muted small fw-medium">
@@ -107,7 +115,7 @@ const FindAllProjects = ({ reloadTrigger }) => {
                             size="sm"
                             className="d-flex align-items-center gap-1"
                             disabled={deletingId === project.id}
-                            onClick={() => handleDelete(project.id, project.name)}
+                            onClick={(e) => handleDelete(e, project.id, project.name)}
                         >
                             {deletingId === project.id ? (
                                 <Spinner animation="border" size="sm" />

@@ -19,6 +19,10 @@ export const getAllProjectsByUserId = async (userId) => {
     return await appFetch('GET', `${BASE_PATH}/projects/getAllProjectsByUserId/${userId}`);
 };
 
+export const getAllPlotsByProjectId = async (projectId) => {
+    return await appFetch('GET', `${BASE_PATH}/projects/getAllPlotsByProjectId/${projectId}`);
+};
+
 export const addPlot = async (projectId, dto) => {
     return await appFetch('POST', `${BASE_PATH}/projects/${projectId}/createPlot`, dto);
 };

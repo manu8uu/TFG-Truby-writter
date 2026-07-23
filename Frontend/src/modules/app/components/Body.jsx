@@ -5,7 +5,7 @@ import { Route, Routes } from 'react-router-dom';
 import AppGlobalComponents from './AppGlobalComponents';
 import Home from './Home';
 import users, { Login, SignUp, Logout, ChangePassword, UserHome, UserProfile } from '../../users';
-import estructure, { CreateProject } from '../../estructure';
+import estructure, { CreateProject, ProjectsHome } from '../../estructure';
 
 const Body = () => {
 
@@ -24,8 +24,9 @@ const Body = () => {
             {loggedIn && <Route path="/users/UserHome" element={<UserHome/>}/>}
             {loggedIn && <Route path="/users/profile" element={<UserProfile/>}/>}
             
-            //PROJECTS
+            {/* PROJECTS */}
             {loggedIn && <Route path="/projects/createProject" element={<CreateProject/>}/>}
+            {loggedIn && <Route path="/projects/:projectId" element={<ProjectsHome/>}/>}
 
         </Routes>
     </Container>
