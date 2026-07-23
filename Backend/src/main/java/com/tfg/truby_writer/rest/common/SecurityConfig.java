@@ -58,6 +58,8 @@ public class SecurityConfig {
             	.requestMatchers(HttpMethod.PUT, "/api/structure/plots/modify/{plotId}").hasRole("USER")
             	.requestMatchers(HttpMethod.DELETE, "/api/structure/plots/delete/{plotId}").hasRole("USER")
             	.requestMatchers(HttpMethod.GET, "/api/structure/plots/{plotId}").hasRole("USER")
+				.requestMatchers(HttpMethod.GET, "/api/structure/projects/getAllPlotsByProjectId/{projectId}").hasRole("USER")
+
 
 				//PREMISE
             	.requestMatchers(HttpMethod.POST, "/api/structure/plots/{plotId}/createPremise").hasRole("USER")

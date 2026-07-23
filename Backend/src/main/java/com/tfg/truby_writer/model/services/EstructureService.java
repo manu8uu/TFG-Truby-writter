@@ -44,6 +44,8 @@ public interface EstructureService {
 
     void deletePlot(Long plotId) throws InstanceNotFoundException;
 
+    List<Plot> getAllPlotsByProjectId(Long projectId) throws InstanceNotFoundException;
+    
     Plot findPlotByName( Long projectId, String name) throws InstanceNotFoundException;
 
     Plot findPlotById(Long plotId) throws InstanceNotFoundException;

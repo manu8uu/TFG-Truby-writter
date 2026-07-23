@@ -29,4 +29,5 @@ public final class PlotConversor {
     public static List<PlotDto> toPlotDtos(List<Plot> plots) {
         return plots.stream().map(PlotConversor::toPlotDto).collect(Collectors.toList());
     }
+
 }

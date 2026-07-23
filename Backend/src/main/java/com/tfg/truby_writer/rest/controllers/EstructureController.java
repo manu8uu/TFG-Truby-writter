@@ -100,6 +100,11 @@ public class EstructureController {
         return PlotConversor.toPlotDto(plot);
     }
 
+    @GetMapping("/projects/getAllPlotsByProjectId/{projectId}")
+    public List<PlotDto> getAllPlotsByProjectId(@PathVariable Long projectId) throws InstanceNotFoundException {
+        List<Plot> plots = estructureService.getAllPlotsByProjectId(projectId);
+        return PlotConversor.toPlotDtos(plots);
+    }
     // PREMISE 
 
     @PostMapping("/plots/{plotId}/createPremise")

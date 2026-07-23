@@ -188,6 +188,12 @@ public class EstructureServiceImpl implements EstructureService{
         return plot;
     }
 
+    @Override
+    public List<Plot> getAllPlotsByProjectId(Long projectId) throws InstanceNotFoundException{
+        getProject(projectId); 
+        return plotDao.getAllPlotsByProjectId(projectId);
+    }
+
     // PREMISES
 
     @Override
