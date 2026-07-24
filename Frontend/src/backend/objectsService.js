@@ -1,6 +1,6 @@
 import { appFetch } from './appFetch';
 
-const BASE_PATH = '/structure';
+const BASE_PATH = '/api/structure';
 
 export const addCharacter = async (projectId, characterDto) => {
     return await appFetch('POST', `${BASE_PATH}/projects/${projectId}/createCharacter`, characterDto);

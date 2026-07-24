@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
 import { Container, Card, Button, Modal } from 'react-bootstrap';
 
 import CreatePlot from './CreatePlot';
 import FindAllPlots from './FindAllPlots';
+import CreateCharacter from '../../objects/components/CreateCharacter';
+import FindAllCharacters from '../../objects/components/FindAllCharacters';
 
 const NAV_ITEMS = [
     { key: 'tramas', label: 'TRAMAS' },
     { key: 'personajes', label: 'PERSONAJES GENERALES' },
-    { key: 'localizaciones', label: 'LOCALIZACIONES GENERALES' },
 ];
 
 const ProjectsHome = () => {
@@ -19,8 +19,13 @@ const ProjectsHome = () => {
     const project = location.state?.project;
 
     const [activeSection, setActiveSection] = useState('tramas');
+    
+    // Estados Modales y Recargas
     const [showCreatePlotModal, setShowCreatePlotModal] = useState(false);
-    const [reloadTrigger, setReloadTrigger] = useState(0);
+    const [showCreateCharacterModal, setShowCreateCharacterModal] = useState(false);
+    
+    const [reloadPlotsTrigger, setReloadPlotsTrigger] = useState(0);
+    const [reloadCharactersTrigger, setReloadCharactersTrigger] = useState(0);
 
     const handleLogout = () => {
         navigate('/users/logout');
@@ -28,7 +33,12 @@ const ProjectsHome = () => {
 
     const handlePlotCreated = () => {
         setShowCreatePlotModal(false);
-        setReloadTrigger(prev => prev + 1);
+        setReloadPlotsTrigger(prev => prev + 1);
+    };
+
+    const handleCharacterCreated = () => {
+        setShowCreateCharacterModal(false);
+        setReloadCharactersTrigger(prev => prev + 1);
     };
 
     return (
@@ -42,14 +52,11 @@ const ProjectsHome = () => {
                         style={{ fontSize: '2rem', cursor: 'pointer' }}
                         onClick={() => navigate('/users/UserHome')}
                     >
-                            {project?.name || 'Título'}
+                        {project?.name || 'Título'}
                     </h1>
 
                     <div className="d-flex align-items-center gap-3">
-                        <i
-                            className="bi bi-person-circle text-secondary"
-                            style={{ fontSize: '1.5rem' }}
-                        ></i>
+                        <i className="bi bi-person-circle text-secondary" style={{ fontSize: '1.5rem' }}></i>
                         <i
                             className="bi bi-box-arrow-right text-secondary"
                             role="button"
@@ -93,6 +100,8 @@ const ProjectsHome = () => {
 
                     {/* Contenido principal */}
                     <div className="flex-grow-1">
+                        
+                        {/* SECCIÓN TRAMAS */}
                         {activeSection === 'tramas' && (
                             <>
                                 <div className="d-flex justify-content-between align-items-center mb-4">
@@ -118,39 +127,40 @@ const ProjectsHome = () => {
                                     </Button>
                                 </div>
 
-                                <FindAllPlots projectId={projectId} reloadTrigger={reloadTrigger} />
+                                <FindAllPlots projectId={projectId} reloadTrigger={reloadPlotsTrigger} />
                             </>
                         )}
 
+                        {/* SECCIÓN PERSONAJES GENERALES */}
                         {activeSection === 'personajes' && (
-                            <Card
-                                className="border-0 shadow-sm p-5 text-center"
-                                style={{
-                                    borderRadius: '1.25rem',
-                                    backgroundColor: '#ffffff',
-                                    border: '1px solid #e2e8f0'
-                                }}
-                            >
-                                <p className="text-muted mb-0">
-                                    Personajes generales — pendiente de implementar.
-                                </p>
-                            </Card>
+                            <>
+                                <div className="d-flex justify-content-between align-items-center mb-4">
+                                    <div>
+                                        <h2 className="fw-bold text-dark mb-1" style={{ fontSize: '1.75rem' }}>
+                                            Personajes Generales
+                                        </h2>
+                                        <p className="text-muted mb-0 fs-6">
+                                            Gestiona los personajes del proyecto
+                                        </p>
+                                    </div>
+
+                                    <Button
+                                        onClick={() => setShowCreateCharacterModal(true)}
+                                        className="px-4 py-2 border-0 fw-semibold shadow-sm d-flex align-items-center gap-2 text-white"
+                                        style={{
+                                            borderRadius: '0.75rem',
+                                            background: 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)'
+                                        }}
+                                    >
+                                        <i className="bi bi-person-plus-fill fs-5"></i>
+                                        Nuevo personaje
+                                    </Button>
+                                </div>
+
+                                <FindAllCharacters projectId={projectId} reloadTrigger={reloadCharactersTrigger} />
+                            </>
                         )}
 
-                        {activeSection === 'localizaciones' && (
-                            <Card
-                                className="border-0 shadow-sm p-5 text-center"
-                                style={{
-                                    borderRadius: '1.25rem',
-                                    backgroundColor: '#ffffff',
-                                    border: '1px solid #e2e8f0'
-                                }}
-                            >
-                                <p className="text-muted mb-0">
-                                    Localizaciones generales — pendiente de implementar.
-                                </p>
-                            </Card>
-                        )}
                     </div>
                 </div>
 
@@ -170,6 +180,25 @@ const ProjectsHome = () => {
                     </Modal.Header>
                     <Modal.Body className="p-4">
                         <CreatePlot projectId={projectId} onSuccess={handlePlotCreated} />
+                    </Modal.Body>
+                </Modal>
+
+                {/* Modal Crear Personaje */}
+                <Modal
+                    show={showCreateCharacterModal}
+                    onHide={() => setShowCreateCharacterModal(false)}
+                    centered
+                    contentClassName="border-0 shadow-lg"
+                    style={{ borderRadius: '1.25rem' }}
+                >
+                    <Modal.Header closeButton className="border-0 pt-4 px-4 pb-0">
+                        <Modal.Title className="fw-bold text-dark d-flex align-items-center gap-2 fs-5">
+                            <i className="bi bi-person-plus text-primary"></i>
+                            Nuevo personaje
+                        </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body className="p-4">
+                        <CreateCharacter projectId={projectId} onSuccess={handleCharacterCreated} />
                     </Modal.Body>
                 </Modal>
 
